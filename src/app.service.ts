@@ -24,23 +24,38 @@ export class AppService {
       categoryList.push({ id: index + 4, name: `카테고리${index + 4}` });
     });
 
+    // interface 구성
+    interface category {
+      id: number;
+      name: string;
+    }
+
+    /**
+     * categoryList를 Map 자료구조로 변환
+     * Map은 hashTable로 구현하기 한다.
+     * category를 더욱 빠르게 찾기 위한 방법
+     */
+    const categoryMap = new Map<string, category>(
+      categoryList.map((category) => [category.name, category]),
+    );
+
     const start = Date.now();
 
-    // 무식한 방법
     const product = {
       id: 1,
       name: '의자',
       keyword: '카테고리10001',
     };
 
-    const category = categoryList.find((value, _) => {
-      if (value.name == product.keyword) return value;
-    });
+    /**
+     * keyword를 Key로 하여 데이터를 더욱 빠르게 가져온다.
+     */
+    const category = categoryMap.get(product.keyword);
 
     const answer = {
       id: product.id,
       name: product.name,
-      category: category,
+      category,
     };
     const end = Date.now();
     return end - start;
@@ -61,6 +76,7 @@ export class AppService {
       translateWordList.push({ src: index.toString(), dest: `A` });
     });
 
+    // 띄워쓰기 오타 수정
     const optionList = [
       { id: 1, name: '블랙 XL' },
       { id: 2, name: '블랙 L' },
@@ -70,10 +86,28 @@ export class AppService {
       { id: 6, name: '레드 M' },
     ];
     [...new Array(50)].forEach((_, index) => {
-      optionList.push({ id: index + 7, name: `블랙${index + 7}` });
+      optionList.push({ id: index + 7, name: `블랙 ${index + 7}` });
+    });
+
+    // Map으로 변환
+    const translationMap = new Map<string, string>();
+    translateWordList.forEach((value, _) => {
+      translationMap.set(value.src, value.dest);
     });
 
     const start = Date.now();
+
+    // 특정 단어 조회 후 치환 작업
+    optionList.forEach((data, _) => {
+      // 공백을 통해 단어 구분
+      const words = data.name.split(' ');
+      const translatedWords = words.map(
+        (word) => translationMap.get(word) || word,
+      );
+      data.name = translatedWords.join(' ');
+    });
+
+    console.log(optionList);
 
     const end = Date.now();
     return end - start;
