@@ -26,12 +26,22 @@ export class AppService {
 
     const start = Date.now();
 
+    // 무식한 방법
     const product = {
       id: 1,
       name: '의자',
-      keyword: '가구',
+      keyword: '카테고리10001',
     };
 
+    const category = categoryList.find((value, _) => {
+      if (value.name == product.keyword) return value;
+    });
+
+    const answer = {
+      id: product.id,
+      name: product.name,
+      category: category,
+    };
     const end = Date.now();
     return end - start;
   }
