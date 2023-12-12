@@ -101,13 +101,13 @@ export class AppService {
     optionList.forEach((data, _) => {
       // 공백을 통해 단어 구분
       const words = data.name.split(' ');
+      // 단어 치환 작업 진행
       const translatedWords = words.map(
+        // 단어가 있을 경우 치환하고, 없는 경우 기존 단어로 사용
         (word) => translationMap.get(word) || word,
       );
       data.name = translatedWords.join(' ');
     });
-
-    console.log(optionList);
 
     const end = Date.now();
     return end - start;
