@@ -10,6 +10,7 @@ import { RateLimitInterCeptor } from './common/interceptor/rate-limit.intercepto
   controllers: [AppController],
   providers: [
     AppService,
+    // 전역 Interceptor 구현
     {
       provide: APP_INTERCEPTOR,
       useClass: RateLimitInterCeptor,
