@@ -40,7 +40,7 @@ export class RateLimitInterCeptor implements NestInterceptor {
    */
   private async delayRequest(id: string, ms: number): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, ms));
-    const countById = (await this.cacheManager.get(id)) as number;
+    const countById = ((await this.cacheManager.get(id)) as number) || 0;
     if (countById > 9) return await this.delayRequest(id, ms);
     await this.cacheManager.set(id, countById + 1, ms);
     return;
